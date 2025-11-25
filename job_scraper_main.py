@@ -19,7 +19,7 @@ if __name__ == "__main__":
     logger.info("Total jobs in the database: %s", count_jobs())
 
     # Start the worker thread to run the scraper periodically
-    worker_thread = threading.Thread(target=start_scraping_worker(20), daemon=True)
+    worker_thread = threading.Thread(target=start_scraping_worker(), daemon=True)
     worker_thread.start()
 
     # Keep the main thread alive

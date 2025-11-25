@@ -5,7 +5,7 @@ import os
 CHECK_ROBOTS = False
 
 # Scraper configuration
-URL_TO_SCRAPE = "https://sg.jobstreet.com/(YOUR-JOB-HERE)-jobs" # Separate words with hyphen symbol (-)
+URL_TO_SCRAPE = "https://my.jobstreet.com/engineering-intern-jobs/in-Kuala-Lumpur" # Separate words with hyphen symbol (-)
 BASE_URL = "/".join(URL_TO_SCRAPE.split("/")[:3]) # A Funny way to extract the base URL =P
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0"
 
