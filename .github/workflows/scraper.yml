@@ -2,17 +2,15 @@ name: Job Scraper Bot
 
 on:
   schedule:
-    # Runs every hour at minute 0 (e.g., 1:00, 2:00, 3:00)
-    - cron: '0 * * * *'
-  # Allows you to run it manually from the Actions tab for testing
-  workflow_dispatch:
+    - cron: '0 */6 * * *' # Runs every 6 hours
+  workflow_dispatch:      # Allows manual testing button
 
 jobs:
   scrape_and_notify:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -20,14 +18,14 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
-          pip install -r requirements.txt
+          pip install requests beautifulsoup4
 
       - name: Run Scraper
+        # 👇 THIS PART IS CRITICAL. DO NOT DELETE IT.
         env:
-          # This pulls the secret you saved in Step 2
-          DISCORD_WEBHOOK_URL_HERE: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          JOBSTREET_COOKIE: ${{ secrets.JOBSTREET_COOKIE }}
         run: |
-          # Make sure the path matches where your file is!
           python worker/worker.py
