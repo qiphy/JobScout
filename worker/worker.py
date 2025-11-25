@@ -21,10 +21,11 @@ def generate_hashed_id(job_info):
     return sha256(raw_id.encode('utf-8')).hexdigest()
 
 def fetch_data(url):
-    # --- 🔴 PASTE COOKIE HERE 🔴 ---
+    cookie_value = os.environ.get("JOBSTREET_COOKIE")
+    
     headers = {
         'User-Agent': USER_AGENT,
-        'Cookie': 'sol_id=b2a11869-e942-4341-9ec3-4f166835703d; g_state={"i_l":0,"i_ll":1764071535138,"i_b":"8VJzX6RmuGnnp9x8EAApznWOrkKjjvQ6j0O3CbfJYiI"}; _legacy_auth0.YYR5RkFITfSNEJOQnQOwhfFQ4dRmZBkX.is.authenticated=true; auth0.YYR5RkFITfSNEJOQnQOwhfFQ4dRmZBkX.is.authenticated=true; last-known-sol-user-id=c6cae1c7bcce429e1cb65e92fdb1fa506cff461a7e915f5e44d92696b2e24ea895f23601362cb19a7fe3608890ba1869cd0546efd59718e6669b4a2fef9c4397b13c297abc35103a8edac03c860e61b9e55a856ac3bddf59f26d812849a2ea758a2ba2601735def4d14ae47d6861207a70c72710e6baf3bc5e9de9210a809515bc8f5cd6ff9ef213385d6e9b8dbfdb1b6a02dba5bba88056676561c3bad74623eb424958effb94; da_searchTerm=undefined; main=V%7C2~P%7Cjobsearch~K%7Cengineering%20intern~WH%7CKuala%20Lumpur~WID%7C1000190~OSF%7Cquick&set=1764072172026/V%7C2~P%7Cjobsearch~K%7Cengineering%20intern~OSF%7Cquick&set=1764071569490/V%7C2~P%7Cjobsearch~K%7Cflex%20internship~OSF%7Cquick&set=1762917960720; __cf_bm=lRoIHyVIGV.H1h61Xogk5v45CMJQg9T11cA2xqrKYR8-1764076699-1.0.1.1-3t_Nv1oN7BsOfdTA09yfa5uH2AC2ENzrEi565yN432A3fYk2XkTSdXevVh.ENbnigL.PAC3u4Ju53XzXZ98EOgu5yR1e1gqya0q1GL7hoOU; _cfuvid=LEHLCuKmSTCl4u0Drx9lcDwsax__fQ4gwvmBjw.GdS4-1764076699421-0.0.1.1-604800000; da_cdt=visid_019a76194d72000e5f4ab592866f07075002d06d00bd6-sesid_1764076700333-hbvid_b2a11869_e942_4341_9ec3_4f166835703d-tempAcqSessionId_1764076700037-tempAcqVisitorId_b2a11869e94243419ec34f166835703d; da_sa_candi_sid=1764076700333; utag_main=v_id:019a76194d72000e5f4ab592866f07075002d06d00bd6$_sn:3$_se:2%3Bexp-session$_ss:0%3Bexp-session$_st:1764078501149%3Bexp-session$ses_id:1764076700333%3Bexp-session$_pn:1%3Bexp-session$dc_visit:1$dc_event:3%3Bexp-session$_prevpage:home%3Bexp-1764080301159; JobseekerSessionId=196c4b84-7fb7-4fd1-9ffa-8714ea79495f; JobseekerVisitorId=196c4b84-7fb7-4fd1-9ffa-8714ea79495f; hubble_temp_acq_session=id%3A1764076700037_end%3A1764078501843_sent%3A6; _dd_s=rum=0&expire=1764077600030&logs=0' 
+        'Cookie': cookie_value if cookie_value else '' 
     }
 
     if not headers['Cookie']:
@@ -165,13 +166,11 @@ def start_scraping_worker():
     
     TARGET_URL = "https://my.jobstreet.com/electrical-engineering-intern-jobs/in-Kuala-Lumpur"
     
-    # UPDATE THIS PART:
-    # Try to get the webhook from the Environment (GitHub Secrets), 
-    # otherwise fall back to a placeholder or local string.
-    DISCORD_WEBHOOK = os.environ.get("https://discord.com/api/webhooks/1442876729357238465/8eyXos4zAgq4PAP8YEa8Wk78C-zzUy6gPcJOuG6i3nqHIFve9qvB9DicvAjaxjaMMPNo")
+    # Retrieve Webhook from GitHub Secrets
+    DISCORD_WEBHOOK = os.environ.get("DISCORD_WEBHOOK")
     
     if not DISCORD_WEBHOOK:
-        logger.error("❌ No Webhook found! Make sure to set it in GitHub Secrets.")
+        logger.error("❌ No Webhook found! Set DISCORD_WEBHOOK in GitHub Secrets.")
         return
 
     jobs = fetch_data(TARGET_URL)
